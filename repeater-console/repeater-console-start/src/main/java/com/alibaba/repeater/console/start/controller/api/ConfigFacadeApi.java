@@ -21,6 +21,9 @@ import javax.annotation.Resource;
 @RequestMapping("/facade/api")
 public class ConfigFacadeApi {
 
+    /**
+     * TODO 这里的这个@Resource注解标记的字段由Spring注入
+     */
     @Resource
     private ModuleConfigService moduleConfigService;
 

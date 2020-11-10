@@ -65,6 +65,10 @@ public class RepeaterModule implements Module, ModuleLifecycle {
 
     private final static Logger log = LoggerFactory.getLogger(RepeaterModule.class);
 
+    /**
+     * TODO 需要注意的是这里的@Resource注解标记的属性不是Spring注入的，而是由
+     *  jvm-sandbox的DefaultCoreModuleManager.injectResourceOnLoadIfNecessary方法完成依赖注入
+     */
     @Resource
     private ModuleEventWatcher eventWatcher;
 
