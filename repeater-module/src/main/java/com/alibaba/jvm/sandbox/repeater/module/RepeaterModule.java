@@ -143,6 +143,7 @@ public class RepeaterModule implements Module, ModuleLifecycle {
                 if (pr.isSuccess()) {
                     log.info("pull repeater config success,config={}", pr.getData());
                     ClassloaderBridge.init(loadedClassDataSource);
+                    // TODO 初始化录制回放插件
                     initialize(pr.getData());
                 }
             }

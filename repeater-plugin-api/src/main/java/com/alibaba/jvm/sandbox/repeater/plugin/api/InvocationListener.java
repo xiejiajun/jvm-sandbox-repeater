@@ -17,7 +17,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.domain.RecordModel;
  * 入口  {@link Invocation#entrance}==true执行
  * {@link RecordModel#entranceInvocation}组装；并通过{@link Broadcaster}分发消息
  * </p>
- *
+ * TODO 这是用于进行流量录制的抽象接口
  * @author zhaoyb1990
  */
 public interface InvocationListener {

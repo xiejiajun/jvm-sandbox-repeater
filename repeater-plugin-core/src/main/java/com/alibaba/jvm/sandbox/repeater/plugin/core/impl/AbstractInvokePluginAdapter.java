@@ -36,6 +36,9 @@ public abstract class AbstractInvokePluginAdapter implements InvokePlugin {
 
     protected volatile RepeaterConfig configTemporary;
 
+    /**
+     * TODO 这个类是jvm-sandbox中通过字节码增强技术对用户指定的方法进行增强的入口
+     */
     private ModuleEventWatcher watcher;
 
     private List<Integer> watchIds = Lists.newCopyOnWriteArrayList();
@@ -66,6 +69,7 @@ public abstract class AbstractInvokePluginAdapter implements InvokePlugin {
     public void unWatch(ModuleEventWatcher watcher, InvocationListener listener) {
         if (CollectionUtils.isNotEmpty(watchIds)) {
             for (Integer watchId : watchIds) {
+                // TODO 这个方法调用会卸载已有的增强逻辑
                 watcher.delete(watchId);
             }
             watchIds.clear();
@@ -112,6 +116,7 @@ public abstract class AbstractInvokePluginAdapter implements InvokePlugin {
      */
     private synchronized void watchIfNecessary() throws PluginLifeCycleException {
         if (watched.compareAndSet(false, true)) {
+            // TODO getEnhanceModels由用户自定义插件实现
             List<EnhanceModel> enhanceModels = getEnhanceModels();
             if (CollectionUtils.isEmpty(enhanceModels)) {
                 throw new PluginLifeCycleException("enhance models is empty, plugin type is " + identity());
@@ -131,7 +136,13 @@ public abstract class AbstractInvokePluginAdapter implements InvokePlugin {
                         behavior.hasAnnotationTypes(mp.getAnnotationTypes());
                     }
                 }
+                // TODO 上面这一段逻辑都是在添加需要增强的类方法的patten表达式
                 if (behavior != null) {
+                    // TODO 这里的onWatch方法最终会根据上面的一大堆patten等配置对匹配上的业务对象对应的class进行字节码增强，增强完后
+                    //  业务对象调用的就是植入了我们定义的流量录制回放逻辑的流程了(本质上是替换了JVM方法区对应类的字节码，而对象执行方法时
+                    //  就是读取这些字节码交由JVM解释执行的)
+                    //  getEventListener由用户自定义插件实现，方便用户定义自己的EventListener来处理录制会回放相关逻辑（录制结果
+                    //  存在哪里，怎么回放，满足什么条件回放由用户自己控制)
                     int watchId = behavior.onWatch(getEventListener(listener), em.getWatchTypes()).getWatchId();
                     watchIds.add(watchId);
                     log.info("add watcher success,type={},watcherId={}", getType().name(), watchId);
