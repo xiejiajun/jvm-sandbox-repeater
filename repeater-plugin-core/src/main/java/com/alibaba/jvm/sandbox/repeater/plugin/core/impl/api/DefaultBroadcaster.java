@@ -62,6 +62,7 @@ public class DefaultBroadcaster extends AbstractBroadcaster {
         try {
             RecordWrapper wrapper = new RecordWrapper(recordModel);
             String body = SerializerWrapper.hessianSerialize(wrapper);
+            // TODO 默认实现是通过http接口存储数据
             broadcast(broadcastRecordUrl, body, recordModel.getTraceId());
         } catch (SerializeException e) {
             log.error("broadcast record failed", e);

@@ -56,6 +56,7 @@ public class DefaultInvocationListener implements InvocationListener {
             if (log.isDebugEnabled()){
                 log.debug("sampleOnRecord:traceId={},rootType={},subTypes={}", recordModel.getTraceId(), invocation.getType(), assembleTypes(recordModel));
             }
+            // TODO 代理(被修改字节码的对象)执行时，将采集到的请求&响应信息保存下来
             broadcast.sendRecord(recordModel);
         } else {
             RecordCache.cacheSubInvocation(invocation);

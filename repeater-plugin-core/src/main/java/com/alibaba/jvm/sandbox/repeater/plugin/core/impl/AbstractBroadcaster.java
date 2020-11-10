@@ -93,6 +93,7 @@ public abstract class AbstractBroadcaster implements Broadcaster {
                 try {
                     final RecordModel recordModel = queue.poll();
                     if (recordModel != null) {
+                        // TODO 保存请求信息
                         ExecutorInner.execute(new Runnable() {
                             @Override
                             public void run() {

@@ -29,6 +29,7 @@ public class StandaloneBroadcaster extends AbstractBroadcaster {
     protected void broadcastRecord(RecordModel rm) {
         try {
             String body = SerializerWrapper.hessianSerialize(rm);
+            // TODO 直接将请求信息写文件
             broadcast(body, rm.getTraceId(), recordSuffix);
             log.info("broadcast success,traceId={},resp={}", rm.getTraceId(), "success");
         } catch (SerializeException e) {

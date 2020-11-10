@@ -37,6 +37,7 @@ public abstract class AbstractRepeater implements Repeater {
             Tracer.start(context.getTraceId());
             // before invoke advice
             RepeatInterceptorFacade.instance().beforeInvoke(context.getRecordModel());
+            // TODO 查询之前留下的审计信息？
             Object response = executeRepeat(context);
             // after invoke advice
             RepeatInterceptorFacade.instance().beforeReturn(context.getRecordModel(), response);
@@ -52,6 +53,7 @@ public abstract class AbstractRepeater implements Repeater {
         } finally {
             Tracer.end();
         }
+        // TODO 发送回放结果
         sendRepeat(record);
     }
 
