@@ -31,7 +31,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  * 对于多个入口方法组合（例如：onRequest获取入参onResponse获取返回值）这种情况，需要重写 doBefore/doRequest/doThrow 自己控制流程
  * </p>
- *
+ * TODO 这个类和DubboEventListener、HttpStandaloneListener是和jvm-sandbox对接获取jvm-sandbox-repeater想要留存和跟踪的调用信息的纽带
+ *  主要看onEvent方法
  * @author zhaoyb1990
  */
 public class DefaultEventListener implements EventListener {
@@ -111,9 +112,11 @@ public class DefaultEventListener implements EventListener {
              */
             switch (event.type) {
                 case BEFORE:
+                    // TODO BEFORE事件是进行回放
                     doBefore((BeforeEvent) event);
                     break;
                 case RETURN:
+                    // TODO RETURN事件时进行录制
                     doReturn((ReturnEvent) event);
                     break;
                 case THROWS:

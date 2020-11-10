@@ -76,10 +76,12 @@ public class HttpStandaloneListener extends DefaultEventListener implements Invo
                     meta.setMatchPercentage(100);
                     meta.setStrategyType(MockStrategy.StrategyType.PARAMETER_MATCH);
                     meta.setRepeatId(traceIdX);
+                    // TODO 拉取回放结果
                     RepeaterResult<RecordModel> pr = StandaloneSwitch.instance().getBroadcaster().pullRecord(meta);
                     if (pr.isSuccess()) {
                         Tracer.start();
                         RepeatContext context = new RepeatContext(meta, pr.getData(), Tracer.getTraceId());
+                        // TODO 回放结果放入缓存
                         RepeatCache.putRepeatContext(context);
                         return;
                     }
@@ -90,6 +92,7 @@ public class HttpStandaloneListener extends DefaultEventListener implements Invo
                     traceId = req.getParameter(Constants.HEADER_TRACE_ID);
                 }
                 if (TraceGenerator.isValid(traceId)) {
+                    // TODO 开始追踪本次方法调用
                     Tracer.start(traceId);
                     return;
                 }
@@ -101,6 +104,7 @@ public class HttpStandaloneListener extends DefaultEventListener implements Invo
     @Override
     protected void doBefore(BeforeEvent event) throws ProcessControlException {
         // 回放流量；入口直接返回
+        // TODO 从initContext初始化的Cache中看看有没有可以回放的流量
         if (RepeatCache.isRepeatFlow(Tracer.getTraceId())) {
             return;
         }
